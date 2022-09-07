@@ -1,7 +1,13 @@
-import main from "./main";
-import dotenv from "dotenv";
-dotenv.config();
+import { config } from "dotenv";
 
-const PORT = process.env.PORT || 5000;
+import APP from "./app";
 
-main.listen(PORT, (): void => console.log(`running on port ${PORT}`));
+async function main() {
+    config();
+    const app = await APP();
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, (): void => console.log(`running on port ${PORT}`));
+}
+
+main();
+
