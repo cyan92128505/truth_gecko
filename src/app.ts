@@ -1,16 +1,17 @@
-import express, {Application, NextFunction, Request, Response} from 'express';
+import express, {Application, Request, Response} from 'express';
 import Database from './config/database';
+import logger from 'morgan';
 
 async function APP() {
   const app: Application = express();
   const database = new Database();
 
-  app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  app.use(logger(process.env.ENV || 'dev'));
+
+  app.get('/', async (req: Request, res: Response) => {
     const _list = await database.instance.query(
       'SELECT datname FROM pg_database;'
     );
-
-    console.dir(_list);
 
     res.json(_list);
   });
