@@ -3,6 +3,8 @@ import Database from './config/database';
 import logger from 'morgan';
 import prepareSeesion from './config/session';
 import preparePasspostConfig from './config/passportConfig';
+import router from './routers';
+import apiV1Router from './routers/api/v1';
 
 async function APP() {
   const app: Application = express();
@@ -11,14 +13,20 @@ async function APP() {
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
 
+  app.set('view engine', 'ejs');
+
   await prepareSeesion(app);
   await preparePasspostConfig(app);
 
-  app.get('/', async (req: Request, res: Response) => {
+  app.get('/testDatabase', async (req: Request, res: Response) => {
     const _list = await Database.query('SELECT datname FROM pg_database;');
 
     res.json(_list);
   });
+
+  //Router middleware
+  app.use(router);
+  app.use(apiV1Router);
 
   return app;
 }
