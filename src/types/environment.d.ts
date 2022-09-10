@@ -11,6 +11,7 @@ declare global {
       FACEBOOK_CLIENT_SECRET: string;
       REMOTE_DB: string;
       LOCAL_DB: string;
+      SESSION_SECRET: string;
       ENV: 'test' | 'dev' | 'prod';
     }
   }
