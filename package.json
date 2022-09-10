@@ -18,7 +18,8 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "db:migrate": "npx sequelize-cli db:migrate"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -33,6 +34,7 @@
     "@types/pg": "^8.6.5",
     "@types/supertest": "^2.0.12",
     "gts": "^3.1.1",
+    "sequelize-cli": "^6.4.1",
     "typescript": "~4.7.0"
   },
   "dependencies": {
