@@ -17,7 +17,14 @@ export default {
       user: req.user,
     });
   },
-  LoginPage: async (req: Request, res: Response) => res.render('auth/login'),
+
+  LoginPage: async (req: Request, res: Response) => {
+    if (req.user) {
+      return res.redirect('/home');
+    }
+    return res.render('auth/login');
+  },
+
   LogoutPage: async (req: Request, res: Response) =>
     res.render('auth/register'),
 };

@@ -6,11 +6,12 @@ const router = Router();
 
 router.route('/api/v1/signin').post(
   passport.authenticate('local', {
-    failureRedirect: '/',
-    successRedirect: '/home',
+    failureRedirect: '/login',
+    failureMessage: true,
   }),
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (req, res) => {}
+  (req, res) => {
+    res.redirect('/');
+  }
 );
 router.route('/api/v1/signup').post(user.Signup);
 

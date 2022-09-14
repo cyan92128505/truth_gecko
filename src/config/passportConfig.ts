@@ -9,6 +9,7 @@ export const preparePasspostConfig = async (app: Application) => {
   app.use(passport.session());
 
   passport.use(
+    'local',
     new Strategy(
       {
         usernameField: 'email',
