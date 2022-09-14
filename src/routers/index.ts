@@ -8,6 +8,7 @@ export default async function (database: DataSource) {
   const userLogic = await user(database);
 
   router.route('/').get(layout.LoginPage);
+  router.route('/login').get(layout.LoginPage);
   router.route('/register').get(layout.LogoutPage);
   router.route('/home').get(layout.HomePage);
   router.route('/logout').get(userLogic.Logout);

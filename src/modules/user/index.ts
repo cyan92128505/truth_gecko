@@ -19,7 +19,13 @@ export default async function (database: DataSource) {
         const user = await userRepository.create({
           email,
           password: hashed_password,
+          createdAt: new Date(),
+          updatedAt: new Date(),
         });
+        const results = await userRepository.save(user);
+
+        console.dir(results);
+
         if (user) {
           res.status(201).json({message: 'new user created!'});
         }

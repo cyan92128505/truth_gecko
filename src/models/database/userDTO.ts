@@ -16,6 +16,24 @@ export class User {
 
   @Column()
   password!: string;
+
+  @Column({
+    type: 'timestamp without time zone',
+    nullable: false,
+  })
+  createdAt!: Date;
+
+  @Column({
+    type: 'timestamp without time zone',
+    nullable: false,
+  })
+  updatedAt!: Date;
+
+  @Column({
+    type: 'timestamp without time zone',
+    nullable: true,
+  })
+  deletedAt!: Date;
 }
 
 export default async function (database: DataSource) {
