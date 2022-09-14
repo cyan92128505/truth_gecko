@@ -1,11 +1,13 @@
-import {Sequelize} from 'sequelize';
+import {DataSource} from 'typeorm';
 
-const sequelizeConnection = new Sequelize(
-  `${process.env.ENV === 'dev' ? process.env.LOCAL_DB : process.env.REMOTE_DB}`,
-  {
-    dialect: 'postgres',
-    database: 'hub',
-  }
-);
+export const database = new DataSource({
+  type: 'postgres',
+  url: `${
+    process.env.ENV === 'dev' ? process.env.LOCAL_DB : process.env.REMOTE_DB
+  }`,
+  database: process.env.CI_DB_NAME,
+  logging: true,
+  entities: ['src/models/database/*.ts'],
+});
 
-export default sequelizeConnection;
+export default database;

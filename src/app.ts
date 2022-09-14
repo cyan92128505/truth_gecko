@@ -1,12 +1,15 @@
 import express, {Application, Request, Response} from 'express';
-import Database from './config/database';
 import logger from 'morgan';
+import 'reflect-metadata';
+import {database} from './config/database';
 import prepareSeesion from './config/session';
 import preparePasspostConfig from './config/passportConfig';
 import router from './routers';
 import apiV1Router from './routers/api/v1';
 
 async function APP() {
+  await database.initialize();
+
   const app: Application = express();
 
   app.use(logger(process.env.ENV || 'dev'));
@@ -16,17 +19,17 @@ async function APP() {
   app.set('view engine', 'ejs');
 
   await prepareSeesion(app);
-  await preparePasspostConfig(app);
+  await preparePasspostConfig(app, database);
 
   app.get('/testDatabase', async (req: Request, res: Response) => {
-    const _list = await Database.query('SELECT datname FROM pg_database;');
+    const _list = await database.query('SELECT datname FROM pg_database;');
 
     res.json(_list);
   });
 
   //Router middleware
-  app.use(router);
-  app.use(apiV1Router);
+  app.use(await router(database));
+  app.use(await apiV1Router(database));
 
   return app;
 }
