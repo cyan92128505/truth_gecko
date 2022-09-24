@@ -15,17 +15,27 @@ export type ExpressUser = {
 };
 
 @Entity({
-  name: 'Users',
+  name: 'users',
 })
 export class User {
   @PrimaryGeneratedColumn('uuid', {name: 'id'})
   id!: string;
+
+  @Column({name: 'name'})
+  name!: string;
 
   @Column({name: 'email'})
   email!: string;
 
   @Column({name: 'password'})
   password!: string;
+
+  @Column({
+    name: 'is_verified',
+    nullable: false,
+    default: false,
+  })
+  isVerified!: boolean;
 
   @Column({
     type: 'timestamp without time zone',
@@ -46,13 +56,6 @@ export class User {
     name: 'deleted_at',
   })
   deletedAt!: Date;
-
-  @Column({
-    name: 'is_verified',
-    nullable: false,
-    default: false,
-  })
-  isVerified!: boolean;
 
   @OneToMany(() => Credential, credential => credential.user)
   credentials!: Credential[];
