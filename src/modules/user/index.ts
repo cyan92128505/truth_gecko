@@ -1,7 +1,7 @@
 import {DataSource} from 'typeorm';
 import {Request, Response} from 'express';
 import bcrypt from 'bcrypt';
-import User from '../../models/database/userDTO';
+import User from '../../models/database/users';
 
 export default async function (database: DataSource) {
   return {

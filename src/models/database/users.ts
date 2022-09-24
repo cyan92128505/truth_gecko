@@ -1,15 +1,15 @@
 import {Entity, PrimaryGeneratedColumn, Column, DataSource} from 'typeorm';
 
 export type ExpressUser = {
-  id?: number;
+  id?: string;
 };
 
 @Entity({
   name: 'Users',
 })
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column()
   email!: string;
@@ -19,23 +19,27 @@ export class User {
 
   @Column({
     type: 'timestamp without time zone',
+    name: 'create_at',
     nullable: false,
   })
   createdAt!: Date;
 
   @Column({
     type: 'timestamp without time zone',
+    name: 'updated_at',
     nullable: false,
   })
   updatedAt!: Date;
 
   @Column({
     type: 'timestamp without time zone',
-    nullable: true,
+    name: 'deleted_at',
   })
   deletedAt!: Date;
 }
 
-export default async function (database: DataSource) {
+export async function UserRepository(database: DataSource) {
   return database.getRepository(User);
 }
+
+export default UserRepository;

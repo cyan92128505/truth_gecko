@@ -1,16 +1,18 @@
+import {ProviderType} from './../types/provider_type';
 import {Application} from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
-// import {Strategy as FacebookStrategy} from 'passport-facebook';
+import {Strategy as FacebookStrategy} from 'passport-facebook';
 import bcrypt from 'bcrypt';
-import User, {ExpressUser} from '../models/database/userDTO';
+import {ExpressUser, UserRepository, CredentialRepository} from '../models';
 import {DataSource} from 'typeorm';
 
 export const preparePasspostConfig = async (
   app: Application,
   database: DataSource
 ) => {
-  const userRepository = await User(database);
+  const userRepository = await UserRepository(database);
+  const credentialRepository = await CredentialRepository(database);
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -35,23 +37,38 @@ export const preparePasspostConfig = async (
     )
   );
 
-  // passport.use(
-  //   'facebook',
-  //   new FacebookStrategy(
-  //     {
-  //       clientID: process.env.FACEBOOK_CLIENT_ID,
-  //       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  //       callbackURL: 'api/v1/oauth2/redirect/facebook',
-  //     },
-  //     (accessToken, refreshToken, profile, cb) => {}
-  //   )
-  // );
+  passport.use(
+    'facebook',
+    new FacebookStrategy(
+      {
+        clientID: process.env.FACEBOOK_CLIENT_ID,
+        clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        callbackURL: 'api/v1/oauth2/redirect/facebook',
+      },
+      async (accessToken, refreshToken, profile, cb) => {
+        const _credential = await credentialRepository
+          .findOne({
+            where: {
+              provider: ProviderType.Facebook,
+              subject: profile.id,
+            },
+          })
+          .catch(error => {
+            cb(error);
+          });
 
-  passport.serializeUser<number>((user: ExpressUser, done) => {
+        if (_credential !== null) {
+          cb(null, _credential);
+        }
+      }
+    )
+  );
+
+  passport.serializeUser<string>((user: ExpressUser, done) => {
     done(null, user.id);
   });
 
-  passport.deserializeUser<number>(async (id, done) => {
+  passport.deserializeUser<string>(async (id, done) => {
     const user = await userRepository.findOneBy({id: id});
     if (!user) {
       done(Error, false);
