@@ -1,34 +1,37 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   PrimaryColumn,
   Column,
   Unique,
   DataSource,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import {User} from './users';
 
 @Entity({
-  name: 'federated_credentials',
+  name: 'credentials',
 })
 @Unique(['provider', 'subject'])
 export class Credential {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
-  @Column({
-    name: 'user_id',
-  })
-  userId!: string;
-
   @PrimaryColumn({
+    name: 'provider',
     nullable: false,
   })
   provider!: string;
 
   @PrimaryColumn({
+    name: 'subject',
     nullable: false,
   })
   subject!: string;
+
+  @ManyToOne(() => User, user => user.credentials)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+  })
+  user!: User;
 
   @Column({
     type: 'timestamp without time zone',

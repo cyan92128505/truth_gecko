@@ -1,4 +1,4 @@
-import {ProviderType} from './../types/provider_type';
+import {ProviderType} from '../types/provider_type';
 import {Application} from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';

@@ -3,7 +3,7 @@ import logger from 'morgan';
 import 'reflect-metadata';
 import {database} from './config/database';
 import prepareSeesion from './config/session';
-import preparePasspostConfig from './config/passportConfig';
+import preparePasspostConfig from './config/passport_config';
 import router from './routers';
 import apiV1Router from './routers/api/v1';
 

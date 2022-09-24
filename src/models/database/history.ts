@@ -1,30 +1,32 @@
 import {
   Entity,
-  PrimaryColumn,
   Column,
-  Unique,
   DataSource,
+  PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import {User} from './users';
 
 @Entity({
-  name: 'tokens',
+  name: 'historys',
 })
-@Unique(['type', 'token'])
-export class Token {
-  @PrimaryColumn({
+export class History {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @Column({
+    name: 'type',
     nullable: false,
   })
   type!: string;
 
-  @PrimaryColumn({
-    nullable: false,
+  @Column({
+    name: 'message',
   })
-  token!: string;
+  message!: string;
 
-  @ManyToOne(() => User, user => user.tokens)
+  @ManyToOne(() => User, user => user.historys)
   @JoinColumn({
     name: 'user_id',
     referencedColumnName: 'id',
@@ -37,17 +39,10 @@ export class Token {
     nullable: false,
   })
   createdAt!: Date;
-
-  @Column({
-    type: 'timestamp without time zone',
-    name: 'updated_at',
-    nullable: false,
-  })
-  updatedAt!: Date;
 }
 
 export async function TokenRepository(database: DataSource) {
-  return database.getRepository(Token);
+  return database.getRepository(History);
 }
 
 export default TokenRepository;

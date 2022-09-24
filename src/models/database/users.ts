@@ -1,4 +1,14 @@
-import {Entity, PrimaryGeneratedColumn, Column, DataSource} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  DataSource,
+  OneToMany,
+} from 'typeorm';
+
+import {Credential} from './credentials';
+import {History} from './history';
+import {Token} from './tokens';
 
 export type ExpressUser = {
   id?: string;
@@ -8,13 +18,13 @@ export type ExpressUser = {
   name: 'Users',
 })
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', {name: 'id'})
   id!: string;
 
-  @Column()
+  @Column({name: 'email'})
   email!: string;
 
-  @Column()
+  @Column({name: 'password'})
   password!: string;
 
   @Column({
@@ -36,6 +46,22 @@ export class User {
     name: 'deleted_at',
   })
   deletedAt!: Date;
+
+  @Column({
+    name: 'is_verified',
+    nullable: false,
+    default: false,
+  })
+  isVerified!: boolean;
+
+  @OneToMany(() => Credential, credential => credential.user)
+  credentials!: Credential[];
+
+  @OneToMany(() => Token, token => token.user)
+  tokens!: Token[];
+
+  @OneToMany(() => History, history => history.user)
+  historys!: History[];
 }
 
 export async function UserRepository(database: DataSource) {
