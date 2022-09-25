@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import bcrypt from 'bcrypt';
-import UserRepository from '../../models/database/users';
+import UserRepository from './models/users';
 
 export default async function UserRouter() {
   return {

@@ -6,27 +6,25 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import {User} from './users';
-import database from '../../config/database';
+import {User} from '../../user/models/users';
+import database from '../../../config/database';
 
 @Entity({
-  name: 'credentials',
+  name: 'tokens',
 })
-@Unique(['provider', 'subject'])
-export class Credential {
+@Unique(['type', 'token'])
+export class Token {
   @PrimaryColumn({
-    name: 'provider',
     nullable: false,
   })
-  provider!: string;
+  type!: string;
 
   @PrimaryColumn({
-    name: 'subject',
     nullable: false,
   })
-  subject!: string;
+  token!: string;
 
-  @ManyToOne(() => User, user => user.credentials)
+  @ManyToOne(() => User, user => user.tokens)
   @JoinColumn({
     name: 'user_id',
     referencedColumnName: 'id',
@@ -46,10 +44,17 @@ export class Credential {
     nullable: false,
   })
   updatedAt!: Date;
+
+  @Column({
+    type: 'timestamp without time zone',
+    name: 'expired_at',
+    nullable: false,
+  })
+  expiredAt!: Date;
 }
 
-export async function CredentialRepository() {
-  return database.getRepository(Credential);
+export async function TokenRepository() {
+  return database.getRepository(Token);
 }
 
-export default CredentialRepository;
+export default TokenRepository;

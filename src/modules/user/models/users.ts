@@ -1,10 +1,10 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from 'typeorm';
 
-import database from '../../config/database';
+import database from '../../../config/database';
 
-import {Credential} from './credentials';
-import {History} from './history';
-import {Token} from './tokens';
+import {Credential} from '../../credential/models/credentials';
+import {History} from '../../history/models/history';
+import {Token} from '../../auth/models/tokens';
 
 export type ExpressUser = {
   id?: string;
@@ -62,6 +62,10 @@ export class User {
 
   @OneToMany(() => History, history => history.user)
   historys!: History[];
+
+  toJSON() {
+    return {...this, password: undefined, isVerified: undefined};
+  }
 }
 
 export async function UserRepository() {

@@ -5,8 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import {User} from './users';
-import database from '../../config/database';
+import {User} from '../../user/models/users';
+import database from '../../../config/database';
 
 @Entity({
   name: 'historys',

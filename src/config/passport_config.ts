@@ -3,7 +3,7 @@ import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
 // import {Strategy as FacebookStrategy} from 'passport-facebook';
 import bcrypt from 'bcrypt';
-import {ExpressUser, UserRepository} from '../models';
+import {ExpressUser, UserRepository} from '../modules/user/models/users';
 
 export const preparePasspostConfig = async (app: Application) => {
   const userRepository = await UserRepository();

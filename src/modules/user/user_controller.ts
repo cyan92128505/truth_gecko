@@ -1,6 +1,6 @@
 import {Body, Controller, Post, Route, SuccessResponse, Tags} from 'tsoa';
 
-import UserRepository from '../../models/database/users';
+import UserRepository from './models/users';
 
 type CreateUserParams = {
   email: string;
