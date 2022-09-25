@@ -50,6 +50,7 @@ export class User {
   @Column({
     type: 'timestamp without time zone',
     name: 'deleted_at',
+    nullable: true,
   })
   deletedAt!: Date;
 

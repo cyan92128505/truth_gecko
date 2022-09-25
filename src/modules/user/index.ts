@@ -7,7 +7,7 @@ export default async function UserRouter() {
     Signup: async (req: Request, res: Response) => {
       const userRepository = await UserRepository();
       try {
-        const {email, password} = req.body;
+        const {email, password, name} = req.body;
 
         //generate hash salt for password
         const salt = await bcrypt.genSalt(12);
@@ -16,6 +16,7 @@ export default async function UserRouter() {
         const hashed_password = await bcrypt.hash(password, salt);
 
         const user = await userRepository.create({
+          name,
           email,
           password: hashed_password,
           createdAt: new Date(),
