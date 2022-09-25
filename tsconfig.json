@@ -8,6 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "outDir": "build",     
+    "resolveJsonModule": true,
     "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
