@@ -44,6 +44,13 @@ export class Token {
     nullable: false,
   })
   updatedAt!: Date;
+
+  @Column({
+    type: 'timestamp without time zone',
+    name: 'expired_at',
+    nullable: false,
+  })
+  expiredAt!: Date;
 }
 
 export async function TokenRepository() {
