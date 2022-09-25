@@ -21,5 +21,5 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts"
-  ]
+, "src/modules/user/user_controller.ts"  ]
 }

@@ -1,6 +1,8 @@
-import express, {Application, Request, Response} from 'express';
+import express, {Application} from 'express';
 import logger from 'morgan';
 import 'reflect-metadata';
+import swaggerUi from 'swagger-ui-express';
+
 import {database} from './config/database';
 import prepareSeesion from './config/session';
 import preparePasspostConfig from './config/passport_config';
@@ -15,21 +17,25 @@ async function APP() {
   app.use(logger(process.env.ENV || 'dev'));
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
+  app.use(express.static('public'));
+  app.use(
+    '/docs',
+    swaggerUi.serve,
+    swaggerUi.setup(undefined, {
+      swaggerOptions: {
+        url: '/swagger.json',
+      },
+    })
+  );
 
   app.set('view engine', 'ejs');
 
   await prepareSeesion(app);
-  await preparePasspostConfig(app, database);
-
-  app.get('/testDatabase', async (req: Request, res: Response) => {
-    const _list = await database.query('SELECT datname FROM pg_database;');
-
-    res.json(_list);
-  });
+  await preparePasspostConfig(app);
 
   //Router middleware
-  app.use(await router(database));
-  app.use(await apiV1Router(database));
+  app.use(await router());
+  app.use(await apiV1Router());
 
   return app;
 }

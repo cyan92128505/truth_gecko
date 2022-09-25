@@ -1,10 +1,6 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  DataSource,
-  OneToMany,
-} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from 'typeorm';
+
+import database from '../../config/database';
 
 import {Credential} from './credentials';
 import {History} from './history';
@@ -67,7 +63,7 @@ export class User {
   historys!: History[];
 }
 
-export async function UserRepository(database: DataSource) {
+export async function UserRepository() {
   return database.getRepository(User);
 }
 

@@ -3,11 +3,11 @@ import {
   PrimaryColumn,
   Column,
   Unique,
-  DataSource,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import {User} from './users';
+import database from '../../config/database';
 
 @Entity({
   name: 'tokens',
@@ -46,7 +46,7 @@ export class Token {
   updatedAt!: Date;
 }
 
-export async function TokenRepository(database: DataSource) {
+export async function TokenRepository() {
   return database.getRepository(Token);
 }
 

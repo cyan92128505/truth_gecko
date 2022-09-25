@@ -1,12 +1,11 @@
-import {DataSource} from 'typeorm';
 import {Request, Response} from 'express';
 import bcrypt from 'bcrypt';
-import User from '../../models/database/users';
+import UserRepository from '../../models/database/users';
 
-export default async function (database: DataSource) {
+export default async function UserRouter() {
   return {
     Signup: async (req: Request, res: Response) => {
-      const userRepository = await User(database);
+      const userRepository = await UserRepository();
       try {
         const {email, password} = req.body;
 

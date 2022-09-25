@@ -1,12 +1,12 @@
 import {
   Entity,
   Column,
-  DataSource,
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import {User} from './users';
+import database from '../../config/database';
 
 @Entity({
   name: 'historys',
@@ -41,7 +41,7 @@ export class History {
   createdAt!: Date;
 }
 
-export async function TokenRepository(database: DataSource) {
+export async function TokenRepository() {
   return database.getRepository(History);
 }
 

@@ -1,11 +1,10 @@
-import {DataSource} from 'typeorm';
 import {Router} from 'express';
 import passport from 'passport';
-import user from '../../../modules/user';
+import UserRouter from '../../../modules/user';
 
-export default async function (database: DataSource) {
+export default async function () {
   const router = Router();
-  const userLogic = await user(database);
+  const userLogic = await UserRouter();
   router.route('/api/v1/signin').post(
     passport.authenticate('local', {
       failureRedirect: '/login',
