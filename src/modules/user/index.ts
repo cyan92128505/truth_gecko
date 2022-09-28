@@ -33,13 +33,6 @@ export default async function UserRouter() {
         console.log(e);
       }
     },
-    Logout: async (req: Request, res: Response) => {
-      req.session.destroy(err => {
-        if (err) {
-          return console.log(err);
-        }
-        res.redirect('/');
-      });
-    },
+    Logout: async (req: Request, res: Response) => {},
   };
 }

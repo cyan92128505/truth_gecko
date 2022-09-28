@@ -1,15 +1,29 @@
-import {Application} from 'express';
+import {Application, Request} from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
-// import {Strategy as FacebookStrategy} from 'passport-facebook';
+import {
+  Strategy as JWTStrategy,
+  ExtractJwt,
+  StrategyOptions,
+} from 'passport-jwt';
+
 import bcrypt from 'bcrypt';
 import {ExpressUser, UserRepository} from '../modules/user/models/users';
 
-export const preparePasspostConfig = async (app: Application) => {
-  const userRepository = await UserRepository();
+const secret = process.env.JWT_SECRET;
 
-  app.use(passport.initialize());
-  app.use(passport.session());
+const cookieRefreshExtractor = (req: Request, key?: string): string => {
+  let jwt = null;
+
+  if (req && req.cookies) {
+    jwt = req.cookies[key || 'refresh'];
+  }
+
+  return jwt;
+};
+
+export const Security = async (app: Application) => {
+  const userRepository = await UserRepository();
 
   passport.use(
     'local',
@@ -17,6 +31,7 @@ export const preparePasspostConfig = async (app: Application) => {
       {
         usernameField: 'email',
         passwordField: 'password',
+        session: false,
       },
       async (email, password, done) => {
         const user = await userRepository.findOne({where: {email: email}});
@@ -27,6 +42,19 @@ export const preparePasspostConfig = async (app: Application) => {
           return done(null, false, {message: 'Invalid credentials.\n'});
         }
         return done(null, user);
+      }
+    )
+  );
+
+  passport.use(
+    'jwt',
+    new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: process.env.JWT_SECRET,
+      },
+      (jwt_payload, done) => {
+        done(null, jwt_payload);
       }
     )
   );
@@ -42,6 +70,8 @@ export const preparePasspostConfig = async (app: Application) => {
     }
     done(null, user);
   });
+
+  app.use(passport.initialize());
 };
 
-export default preparePasspostConfig;
+export default Security;

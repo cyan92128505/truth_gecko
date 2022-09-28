@@ -17,6 +17,8 @@ declare global {
       CI_DB_HOSTNAME: string;
       CI_DB_PORT: string;
       SESSION_SECRET: string;
+      JWT_SECRET: string;
+      JWT_EXPIRATION_TIME: number;
       ENV: 'test' | 'dev' | 'prod';
     }
   }
